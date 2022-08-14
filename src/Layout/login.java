@@ -8,6 +8,7 @@ package Layout;
 import javax.swing.*;
 import java.sql.*;
 import Config.Db;
+import java.awt.event.KeyEvent;
 
 /**
  *
@@ -18,10 +19,64 @@ public class login extends javax.swing.JFrame {
     static Connection conn = Db.getConnection();
     static Statement db;
     static ResultSet Result;
+    public static String employee_id;
+    public static String division_name;
+    public static String id_level;
     
     public login() {
         initComponents();
         
+    }
+    
+    protected void doLogin(){
+        String val_username = f_username.getText();
+        String val_password = String.valueOf(f_password.getPassword());
+        
+        //VALIDATION
+        if ( val_username.trim().length() == 0 || val_password.trim().length() == 0){
+            JOptionPane.showMessageDialog(null,"Form required!");
+        }
+        
+        try{
+            String query = "SELECT b.employee_id,\n" +
+                                "b.password,\n" +
+                                "c.name AS division_name,\n" +
+                                "a.id_level\n" +
+                            "FROM t_user_level a\n" +
+                            "JOIN t_employee b ON b.id = a.id_user\n" +
+                            "JOIN t_division c ON a.id_division = c.id " +
+                            "WHERE b.employee_id=? AND b.password=MD5(?)";
+            PreparedStatement req = conn.prepareStatement(query);
+            req.setString(1,val_username);
+            req.setString(2,val_password);
+            Result = req.executeQuery();
+            if(Result.next()){
+                employee_id = Result.getString("employee_id");
+                division_name = Result.getString("division_name");
+                id_level = Result.getString("id_level");
+                
+                if("admin".equals(division_name)){
+                    JOptionPane.showMessageDialog(null,"Login Success");
+                    admin admin = new admin();
+                    admin.setVisible(true);
+                    admin.pack();
+                    this.dispose();
+                }
+                if("HRD".equals(division_name)){
+                    JOptionPane.showMessageDialog(null,"Login Success");
+                    HRD hrd = new HRD();
+                    hrd.setVisible(true);
+                    hrd.pack();
+                    this.dispose();
+                }
+            }else{
+                JOptionPane.showMessageDialog(null,"Username & Password is Incorrect");
+            }
+        }catch (SQLException ex){
+            JOptionPane.showMessageDialog(null,ex.getMessage());
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"Username & Password is Incorrect");
+        }
     }
 
     /**
@@ -43,6 +98,7 @@ public class login extends javax.swing.JFrame {
         f_password = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(810, 556));
 
         javax.swing.GroupLayout bg_login1Layout = new javax.swing.GroupLayout(bg_login1);
         bg_login1.setLayout(bg_login1Layout);
@@ -61,6 +117,11 @@ public class login extends javax.swing.JFrame {
 
         f_username.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
         f_username.setToolTipText("");
+        f_username.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                f_usernameActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
         jLabel2.setText("Username");
@@ -74,6 +135,17 @@ public class login extends javax.swing.JFrame {
         btn_login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_loginActionPerformed(evt);
+            }
+        });
+        btn_login.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btn_loginKeyPressed(evt);
+            }
+        });
+
+        f_password.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                f_passwordKeyPressed(evt);
             }
         });
 
@@ -129,53 +201,39 @@ public class login extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(339, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(156, 156, 156)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(301, 301, 301))
+                .addContainerGap(157, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(242, 242, 242)
+                .addGap(117, 117, 117)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(282, Short.MAX_VALUE))
+                .addContainerGap(117, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
-       
-        String val_username = f_username.getText();
-        String val_password = String.valueOf(f_password.getPassword());
-        
-        //VALIDATION
-        if ( val_username.trim().length() == 0 || val_password.trim().length() == 0){
-            JOptionPane.showMessageDialog(null,"Form required!");
-        }
-        
-        try{
-            String query = "SELECT * FROM `t_user` WHERE `username`=? AND `password`=MD5(?)";
-            PreparedStatement req = conn.prepareStatement(query);
-            req.setString(1,val_username);
-            req.setString(2,val_password);
-            Result = req.executeQuery();
-            if(Result.next()){
-                JOptionPane.showMessageDialog(null,"Login Success");
-            }else{
-                JOptionPane.showMessageDialog(null,"Username & Password is Incorrect");
-            }
-        }catch (SQLException ex){
-            JOptionPane.showMessageDialog(null,ex.getMessage());
-        }
-        
-        
-        
-        
-        
-        
+        doLogin();
     }//GEN-LAST:event_btn_loginActionPerformed
+
+    private void f_usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_f_usernameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_f_usernameActionPerformed
+
+    private void f_passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_f_passwordKeyPressed
+        if (evt.getKeyCode()==KeyEvent.VK_ENTER){
+            doLogin();
+        }
+    }//GEN-LAST:event_f_passwordKeyPressed
+
+    private void btn_loginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_loginKeyPressed
+        
+    }//GEN-LAST:event_btn_loginKeyPressed
 
     /**
      * @param args the command line arguments
