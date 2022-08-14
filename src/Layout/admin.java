@@ -996,9 +996,9 @@ public class admin extends javax.swing.JFrame {
 
             stat.executeUpdate();
             JOptionPane.showMessageDialog(null, "Data Berhasil Disimpan ");
-            kosong();
+            clear_form_inventory();
             ttag.requestFocus();
-            datatable();
+            dt_inventory();
         }catch (SQLException e){
             JOptionPane.showMessageDialog(null, "Data Gagal Disimpan "+e);
         }
@@ -1017,9 +1017,9 @@ public class admin extends javax.swing.JFrame {
 
             stat.executeUpdate();
             JOptionPane.showMessageDialog(null, "Data Berhasil Diubah");
-            kosong();
+            clear_form_inventory();
             ttag.requestFocus();
-            datatable();
+            dt_inventory();
         }catch (SQLException e){
             JOptionPane.showMessageDialog(null, "Data Gagal Diubah "+e);
         }
@@ -1034,9 +1034,9 @@ public class admin extends javax.swing.JFrame {
                 PreparedStatement stat = conn.prepareStatement(sql);
                 stat.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Data Berhasil dihapus");
-                kosong();
+                clear_form_inventory();
                 ttag.requestFocus();
-                datatable();
+                dt_inventory();
             }catch (SQLException e){
                 JOptionPane.showMessageDialog(null, "Data Gagal dihapus"+e);
             }
