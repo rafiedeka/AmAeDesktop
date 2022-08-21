@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9c4a29f2-5787-4986-bce5-1928b432748f">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     a.`id` AS t_employee_id,
+     a.`employee_id` AS t_employee_employee_id,
+     a.`name` AS t_employee_name,
+     a.`email` AS t_employee_email,
+     a.`password` AS t_employee_password,
+     a.`gender` AS t_employee_gender,
+     a.`address` AS t_employee_address,
+     a.`phone` AS t_employee_phone,
+     a.`created_at` AS t_employee_created_at,
+     a.`updated_at` AS t_employee_updated_at
+FROM
+     `t_employee` a]]>
+	</queryString>
+	<field name="t_employee_id" class="java.lang.Integer"/>
+	<field name="t_employee_employee_id" class="java.lang.String"/>
+	<field name="t_employee_name" class="java.lang.String"/>
+	<field name="t_employee_email" class="java.lang.String"/>
+	<field name="t_employee_password" class="java.lang.String"/>
+	<field name="t_employee_gender" class="java.lang.String"/>
+	<field name="t_employee_address" class="java.lang.String"/>
+	<field name="t_employee_phone" class="java.lang.String"/>
+	<field name="t_employee_created_at" class="java.sql.Timestamp"/>
+	<field name="t_employee_updated_at" class="java.sql.Timestamp"/>
+	<group name="t_employee_id">
+		<groupExpression><![CDATA[$F{t_employee_id}]]></groupExpression>
+	</group>
+	<group name="t_employee_employee_id">
+		<groupExpression><![CDATA[$F{t_employee_employee_id}]]></groupExpression>
+	</group>
+	<group name="t_employee_created_at">
+		<groupExpression><![CDATA[$F{t_employee_created_at}]]></groupExpression>
+	</group>
+	<group name="t_employee_updated_at">
+		<groupExpression><![CDATA[$F{t_employee_updated_at}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="55" height="20" uuid="c1f0a908-d5f5-4b52-81a0-9802370f3d57"/>
+				<text><![CDATA[NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="25" y="0" width="85" height="20" uuid="01d50ed7-3e20-483a-a247-b0e070173ae6"/>
+				<text><![CDATA[Employee ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="96" y="0" width="50" height="20" uuid="1c5bf5a2-8c8c-4168-85f8-cb406f1f6c6d"/>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="146" y="0" width="59" height="20" uuid="c99acbab-a46d-4aad-bde8-78c8edd83e4a"/>
+				<text><![CDATA[Email]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="205" y="0" width="70" height="20" uuid="039254a4-fb95-4cba-a86d-b5c9c0f78583"/>
+				<text><![CDATA[Gender]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="275" y="0" width="101" height="20" uuid="a6717e19-6ee4-43b9-a005-8ea104f25db4"/>
+				<text><![CDATA[Address]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="376" y="0" width="83" height="20" uuid="2c455910-eba2-4ca7-836c-3663a30f9e2d"/>
+				<text><![CDATA[Phone]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="459" y="0" width="96" height="20" uuid="9674f380-b1bd-466b-aa03-e7542c18859e"/>
+				<text><![CDATA[Created Date Time]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="25" height="20" uuid="9724d16b-2baf-493f-b183-43a4b41261f0"/>
+				<textFieldExpression><![CDATA[$F{t_employee_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="25" y="0" width="71" height="20" uuid="a1314c19-d95b-42a1-8971-32992d0c5d86"/>
+				<textFieldExpression><![CDATA[$F{t_employee_employee_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="96" y="0" width="50" height="20" uuid="9c9e1535-8296-4a23-95b7-f34d745fd0ac"/>
+				<textFieldExpression><![CDATA[$F{t_employee_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="146" y="0" width="59" height="20" uuid="45fc4ebd-c238-42d0-90df-9cf82eaf9a70"/>
+				<textFieldExpression><![CDATA[$F{t_employee_email}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="205" y="0" width="70" height="20" uuid="bf87a6f3-556d-458e-af42-65cbcf7b68c0"/>
+				<textFieldExpression><![CDATA[$F{t_employee_gender}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="275" y="0" width="101" height="20" uuid="55023db6-aa11-4dea-94b6-27e93fd1e83a"/>
+				<textFieldExpression><![CDATA[$F{t_employee_address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="376" y="0" width="83" height="20" uuid="c0495a27-0dc6-4eed-926f-e22393d5be8c"/>
+				<textFieldExpression><![CDATA[$F{t_employee_phone}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="459" y="0" width="96" height="20" uuid="ec9f27cd-c0e5-4b0b-92ab-8a0db14e77de"/>
+				<textFieldExpression><![CDATA[$F{t_employee_created_at}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

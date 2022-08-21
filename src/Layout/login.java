@@ -8,6 +8,8 @@ package Layout;
 import javax.swing.*;
 import java.sql.*;
 import Config.Db;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
 /**
@@ -23,8 +25,11 @@ public class login extends javax.swing.JFrame {
     public static String division_name;
     public static String id_level;
     
+    
     public login() {
         initComponents();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
         
     }
     
@@ -41,11 +46,12 @@ public class login extends javax.swing.JFrame {
             String query = "SELECT b.employee_id,\n" +
                                 "b.password,\n" +
                                 "c.name AS division_name,\n" +
+                                "b.email,\n" +
                                 "a.id_level\n" +
                             "FROM t_user_level a\n" +
                             "JOIN t_employee b ON b.id = a.id_user\n" +
                             "JOIN t_division c ON a.id_division = c.id " +
-                            "WHERE b.employee_id=? AND b.password=MD5(?)";
+                            "WHERE b.employee_id=? AND b.password=MD5(?) LIMIT 1";
             PreparedStatement req = conn.prepareStatement(query);
             req.setString(1,val_username);
             req.setString(2,val_password);
@@ -55,13 +61,22 @@ public class login extends javax.swing.JFrame {
                 division_name = Result.getString("division_name");
                 id_level = Result.getString("id_level");
                 
-                if("admin".equals(division_name)){
-                    JOptionPane.showMessageDialog(null,"Login Success");
+                //SESSION
+                Session.employee_id = employee_id;
+                Session.name = employee_id;
+                Session.division = division_name;
+                Session.email = Result.getString("email");
+                
+                if("superadmin".equals(Result.getString("division_name"))){
+                    
                     admin admin = new admin();
                     admin.setVisible(true);
                     admin.pack();
                     this.dispose();
+                    JOptionPane.showMessageDialog(null,"Login Success");
+                    
                 }
+                
                 if("HRD".equals(division_name)){
                     JOptionPane.showMessageDialog(null,"Login Success");
                     HRD hrd = new HRD();
@@ -69,13 +84,16 @@ public class login extends javax.swing.JFrame {
                     hrd.pack();
                     this.dispose();
                 }
+                
             }else{
                 JOptionPane.showMessageDialog(null,"Username & Password is Incorrect");
             }
         }catch (SQLException ex){
             JOptionPane.showMessageDialog(null,ex.getMessage());
+            System.out.print(ex.getMessage());
         }catch(Exception e){
             JOptionPane.showMessageDialog(null,"Username & Password is Incorrect");
+            System.out.print(e.getMessage());
         }
     }
 
