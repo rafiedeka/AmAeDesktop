@@ -15,6 +15,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -34,6 +36,11 @@ import javax.swing.text.DateFormatter;
 import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.PlainDocument;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.calendar.CalendarUtils;
 
@@ -155,7 +162,7 @@ public final class admin extends javax.swing.JFrame {
             tkat.setText("");
             tqty.setText("");
             jtk.setText("");
-            tstatus.setText("");
+            tstatus.setSelectedIndex(0);
             tcari_inventory.setText("");
             F_inventory_id.setText("");
             btn_save_inventory.setEnabled(true);
@@ -498,6 +505,21 @@ public final class admin extends javax.swing.JFrame {
             clear_form_payment();
         }
         
+        protected void open_form_payment(){
+            F_payment_basicSalary.setEnabled(true);
+            F_payment_allowance.setEnabled(true);
+            F_payment_overtime.setEnabled(true);
+            F_payment_other.setEnabled(true);
+            F_payment_bpjstkc.setEnabled(true);
+            F_payment_bpjsksc.setEnabled(true);
+            F_payment_eid_allowance.setEnabled(true);
+            F_payment_total_income.setEnabled(true);
+            F_payment_bpjstke.setEnabled(true);
+            F_payment_bpjskse.setEnabled(true);
+            F_payment_attendance.setEnabled(true);
+            F_payment_net_total.setEnabled(true);
+        }
+        
         protected void clear_form_payment(){
             F_payment_basicSalary.setText(String.valueOf(0));
             F_payment_allowance.setText(String.valueOf(0));
@@ -613,8 +635,8 @@ public final class admin extends javax.swing.JFrame {
         btn_delete_inventory = new javax.swing.JButton();
         btn_clear_inventory = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
-        tstatus = new javax.swing.JTextField();
         F_inventory_id = new javax.swing.JTextField();
+        tstatus = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tabelinventory = new javax.swing.JTable();
@@ -1277,10 +1299,10 @@ public final class admin extends javax.swing.JFrame {
         jPanel6.setPreferredSize(new java.awt.Dimension(600, 227));
 
         jLabel11.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
-        jLabel11.setText("Kata Kunci");
+        jLabel11.setText("Search");
 
         btn_search_employee.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
-        btn_search_employee.setText("CARI");
+        btn_search_employee.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Asset/search.png"))); // NOI18N
         btn_search_employee.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_search_employeeActionPerformed(evt);
@@ -1312,7 +1334,7 @@ public final class admin extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1328,9 +1350,9 @@ public final class admin extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(tcari1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_search_employee, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_search_employee, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1345,7 +1367,7 @@ public final class admin extends javax.swing.JFrame {
                     .addGroup(panel_employeeLayout.createSequentialGroup()
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE)))
+                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 646, Short.MAX_VALUE)))
                 .addGap(10, 10, 10))
         );
         panel_employeeLayout.setVerticalGroup(
@@ -1451,6 +1473,8 @@ public final class admin extends javax.swing.JFrame {
             }
         });
 
+        tstatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Not Available", " " }));
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -1460,14 +1484,6 @@ public final class admin extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(btn_save_inventory, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(56, 56, 56)
-                                .addComponent(btn_edit_inventory, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
-                                .addComponent(btn_delete_inventory, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(34, 34, 34)
-                                .addComponent(btn_clear_inventory, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1476,24 +1492,35 @@ public final class admin extends javax.swing.JFrame {
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(tmodel, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
                                     .addComponent(ttag)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(tqty, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tstatus)
-                                    .addComponent(tkat)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE))))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(btn_save_inventory, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(56, 56, 56)
+                                .addComponent(btn_edit_inventory, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
+                                .addComponent(btn_delete_inventory, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(34, 34, 34)
+                                .addComponent(btn_clear_inventory, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(26, 26, 26))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(F_inventory_id, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tqty, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tstatus, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tkat)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE))
+                                .addGap(26, 26, 26))))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1555,7 +1582,7 @@ public final class admin extends javax.swing.JFrame {
         jScrollPane2.setViewportView(tabelinventory);
 
         btn_search_inventory.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
-        btn_search_inventory.setText("CARI");
+        btn_search_inventory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Asset/search.png"))); // NOI18N
         btn_search_inventory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_search_inventoryActionPerformed(evt);
@@ -1563,7 +1590,7 @@ public final class admin extends javax.swing.JFrame {
         });
 
         jLabel8.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
-        jLabel8.setText("Kata Kunci");
+        jLabel8.setText("Search");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -1572,7 +1599,7 @@ public final class admin extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1760,10 +1787,8 @@ public final class admin extends javax.swing.JFrame {
                                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(F_asset_id, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel29))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE))
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addComponent(jLabel31)
+                                    .addComponent(jLabel29)
+                                    .addComponent(jLabel31))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
@@ -1849,7 +1874,7 @@ public final class admin extends javax.swing.JFrame {
         jScrollPane6.setViewportView(table_asset);
 
         btn_search_asset.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
-        btn_search_asset.setText("CARI");
+        btn_search_asset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Asset/search.png"))); // NOI18N
         btn_search_asset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_search_assetActionPerformed(evt);
@@ -1857,7 +1882,7 @@ public final class admin extends javax.swing.JFrame {
         });
 
         jLabel23.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
-        jLabel23.setText("Kata Kunci");
+        jLabel23.setText("Search");
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -2414,7 +2439,7 @@ public final class admin extends javax.swing.JFrame {
                                 .addComponent(jLabel56)
                                 .addGap(47, 47, 47)
                                 .addComponent(F_payment_total_income, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel11Layout.createSequentialGroup()
                                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2492,36 +2517,38 @@ public final class admin extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel49)
-                            .addComponent(F_payment_other, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel11Layout.createSequentialGroup()
+                                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel49)
+                                    .addComponent(F_payment_other, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel50)
+                                    .addComponent(F_payment_bpjstkc, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel11Layout.createSequentialGroup()
+                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel59)
+                                    .addComponent(F_payment_net_total, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel50)
-                            .addComponent(F_payment_bpjstkc, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel51)
+                            .addComponent(F_payment_bpjsksc, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(F_payment_eid_allowance, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel53))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(F_payment_total_income, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel56)))
                     .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel57)
-                        .addComponent(F_payment_absent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel59)
-                            .addComponent(F_payment_net_total, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel51)
-                    .addComponent(F_payment_bpjsksc, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(F_payment_eid_allowance, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel53))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(F_payment_total_income, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel56))
+                        .addComponent(F_payment_absent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(19, 19, 19)
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_edit_division1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2592,13 +2619,11 @@ public final class admin extends javax.swing.JFrame {
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(BreadCrumb5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(10, 10, 10))
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(BreadCrumb5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(10, 10, 10))
         );
         jPanel12Layout.setVerticalGroup(
@@ -2888,7 +2913,7 @@ public final class admin extends javax.swing.JFrame {
         String cattegory = tkat.getText();
         String qty = tqty.getText();
         String description = jtk.getText();
-        String status = tstatus.getText();
+        String status = tstatus.getSelectedItem().toString();
         String datetime = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(Calendar.getInstance().getTime());
         
         if ( tag.trim().length() == 0 || model.trim().length() == 0 || cattegory.trim().length() == 0 || qty.trim().length() == 0 || description.trim().length() == 0 || status.trim().length() == 0){
@@ -2924,7 +2949,7 @@ public final class admin extends javax.swing.JFrame {
         String cattegory = tkat.getText();
         String qty = tqty.getText();
         String description = jtk.getText();
-        String status = tstatus.getText();
+        String status = tstatus.getSelectedItem().toString();
         String datetime = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(Calendar.getInstance().getTime());
         if ( tag.trim().length() == 0 || model.trim().length() == 0 || cattegory.trim().length() == 0 || qty.trim().length() == 0 || description.trim().length() == 0 || status.trim().length() == 0){
             JOptionPane.showMessageDialog(null,"Form required!");
@@ -2994,7 +3019,7 @@ public final class admin extends javax.swing.JFrame {
         tkat.setText(cattegory);
         tqty.setText(qty);
         jtk.setText(description);
-        tstatus.setText(status);
+        tstatus.setSelectedItem(status);
         btn_edit_inventory.setEnabled(true);
         btn_save_inventory.setEnabled(false);
         btn_delete_inventory.setEnabled(true);
@@ -4236,13 +4261,56 @@ public final class admin extends javax.swing.JFrame {
     private void F_payment_employeeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_F_payment_employeeItemStateChanged
        if (evt.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
           Object item = evt.getItem();
-          System.out.println(item);
+          
+          if(item != "--- choose ---"){
+              
+            // System.out.println(inCharge.indexOf(regex));
+            String a = item.toString();
+            String regex = "-";
+            String str_employee = a.substring(0, a.indexOf(regex));
+            String employee_id = "";
+            String division = "";
+            
+            // Get Id for Employee Id
+            String query_get_employee_id = "SELECT c.id AS employee_id, b.name AS division FROM t_user_level a\n" +
+                                            "LEFT JOIN t_division b ON a.id_division = b.id\n" +
+                                            "LEFT JOIN t_employee c ON a.id_user = c.id\n" +
+                                            "WHERE c.employee_id='"+ str_employee +"' LIMIT 1";
+
+            try {
+                java.sql.Statement stat = conn.createStatement();
+                ResultSet hasil = stat.executeQuery(query_get_employee_id);
+                while (hasil.next()){
+                    employee_id = hasil.getString("employee_id");
+                    division = hasil.getString("division");
+                }
+            }catch (SQLException ex) {
+                System.out.println(ex);
+            }
+            
+            F_payment_division.setText(division);
+            F_payment_division.setEnabled(true);
+            F_payment_division.setEditable(false);
+            open_form_payment();
+              
+          }
        }
         
     }//GEN-LAST:event_F_payment_employeeItemStateChanged
 
     private void btn_print_employeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_print_employeeActionPerformed
-        // TODO add your handling code here:
+        try {
+            String filename = "src/Report/SampleReport1.jasper";
+            HashMap parameter = new HashMap();
+            File FileReport = new File(filename);
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(FileReport.getPath());
+            JasperPrint  jasperPrint = JasperFillManager.fillReport(jasperReport,parameter,conn);
+            JasperViewer.viewReport(jasperPrint,false);
+            JasperViewer.setDefaultLookAndFeelDecorated(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Print Error");
+            System.out.print(e);
+        }
     }//GEN-LAST:event_btn_print_employeeActionPerformed
 
     /**
@@ -4500,7 +4568,7 @@ public final class admin extends javax.swing.JFrame {
     private javax.swing.JTextField tnama;
     private javax.swing.JTextField tphone;
     private javax.swing.JTextField tqty;
-    private javax.swing.JTextField tstatus;
+    private javax.swing.JComboBox<String> tstatus;
     private javax.swing.JTextField ttag;
     // End of variables declaration//GEN-END:variables
 }

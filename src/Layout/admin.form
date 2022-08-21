@@ -438,8 +438,8 @@
                           <Component id="BreadCrumb" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jPanel5" pref="627" max="32767" attributes="0"/>
-                              <Component id="jPanel6" pref="627" max="32767" attributes="0"/>
+                              <Component id="jPanel5" pref="633" max="32767" attributes="0"/>
+                              <Component id="jPanel6" pref="633" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       </Group>
@@ -948,7 +948,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jScrollPane4" pref="633" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane4" pref="622" max="32767" attributes="0"/>
                                   <Group type="102" attributes="0">
                                       <Component id="jLabel11" min="-2" pref="85" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
@@ -968,10 +968,10 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="tcari1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="btn_search_employee" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="btn_search_employee" alignment="0" min="-2" pref="27" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                              <Component id="jScrollPane4" pref="567" max="32767" attributes="0"/>
+                              <Component id="jScrollPane4" pref="570" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -983,7 +983,7 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Sitka Text" size="13" style="1"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Kata Kunci"/>
+                        <Property name="text" type="java.lang.String" value="Search"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="tcari1">
@@ -993,7 +993,9 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Sitka Text" size="13" style="1"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="CARI"/>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/Asset/search.png"/>
+                        </Property>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_search_employeeActionPerformed"/>
@@ -1124,15 +1126,6 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" attributes="0">
-                                              <Component id="btn_save_inventory" min="-2" pref="100" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
-                                              <Component id="btn_edit_inventory" min="-2" pref="100" max="-2" attributes="0"/>
-                                              <EmptySpace pref="82" max="32767" attributes="0"/>
-                                              <Component id="btn_delete_inventory" min="-2" pref="100" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-                                              <Component id="btn_clear_inventory" min="-2" pref="100" max="-2" attributes="0"/>
-                                          </Group>
                                           <Group type="102" alignment="1" attributes="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Component id="jLabel3" max="32767" attributes="0"/>
@@ -1144,21 +1137,14 @@
                                                   <Component id="ttag" max="32767" attributes="0"/>
                                               </Group>
                                           </Group>
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                                                      <Component id="jLabel7" alignment="0" max="32767" attributes="0"/>
-                                                      <Component id="jLabel5" max="32767" attributes="0"/>
-                                                  </Group>
-                                                  <Component id="jLabel16" alignment="0" min="-2" pref="128" max="-2" attributes="0"/>
-                                              </Group>
-                                              <EmptySpace max="32767" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                  <Component id="tqty" min="-2" pref="37" max="-2" attributes="0"/>
-                                                  <Component id="tstatus" alignment="0" max="32767" attributes="0"/>
-                                                  <Component id="tkat" alignment="0" max="32767" attributes="0"/>
-                                                  <Component id="jScrollPane1" alignment="0" pref="371" max="32767" attributes="0"/>
-                                              </Group>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="btn_save_inventory" min="-2" pref="100" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
+                                              <Component id="btn_edit_inventory" min="-2" pref="100" max="-2" attributes="0"/>
+                                              <EmptySpace pref="82" max="32767" attributes="0"/>
+                                              <Component id="btn_delete_inventory" min="-2" pref="100" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                                              <Component id="btn_clear_inventory" min="-2" pref="100" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
@@ -1169,6 +1155,27 @@
                                           <Component id="F_inventory_id" min="-2" pref="139" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="jLabel7" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jLabel5" max="32767" attributes="0"/>
+                                          </Group>
+                                          <Component id="jLabel16" alignment="0" min="-2" pref="128" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="tqty" min="-2" pref="37" max="-2" attributes="0"/>
+                                          <Component id="tstatus" min="-2" pref="372" max="-2" attributes="0"/>
+                                          <Group type="102" attributes="0">
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="tkat" alignment="0" max="32767" attributes="0"/>
+                                                  <Component id="jScrollPane1" alignment="0" pref="371" max="32767" attributes="0"/>
+                                              </Group>
+                                              <EmptySpace min="26" pref="26" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
                                   </Group>
                               </Group>
                           </Group>
@@ -1340,12 +1347,24 @@
                         <Property name="text" type="java.lang.String" value="Status"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JTextField" name="tstatus">
-                    </Component>
                     <Component class="javax.swing.JTextField" name="F_inventory_id">
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="F_inventory_idActionPerformed"/>
                       </Events>
+                    </Component>
+                    <Component class="javax.swing.JComboBox" name="tstatus">
+                      <Properties>
+                        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                          <StringArray count="3">
+                            <StringItem index="0" value="Available"/>
+                            <StringItem index="1" value="Not Available"/>
+                            <StringItem index="2" value=" "/>
+                          </StringArray>
+                        </Property>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                      </AuxValues>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -1362,7 +1381,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane2" alignment="0" pref="623" max="32767" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -1381,7 +1400,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="tcari_inventory" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="btn_search_inventory" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="btn_search_inventory" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
                                   <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -1426,7 +1445,9 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Sitka Text" size="13" style="1"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="CARI"/>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/Asset/search.png"/>
+                        </Property>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_search_inventoryActionPerformed"/>
@@ -1437,7 +1458,7 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Sitka Text" size="13" style="1"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Kata Kunci"/>
+                        <Property name="text" type="java.lang.String" value="Search"/>
                       </Properties>
                     </Component>
                   </SubComponents>
@@ -1938,7 +1959,9 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Sitka Text" size="13" style="1"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="CARI"/>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/Asset/search.png"/>
+                        </Property>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_search_assetActionPerformed"/>
@@ -1949,7 +1972,7 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Sitka Text" size="13" style="1"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Kata Kunci"/>
+                        <Property name="text" type="java.lang.String" value="Search"/>
                       </Properties>
                     </Component>
                   </SubComponents>
@@ -2604,7 +2627,7 @@
                                               <Component id="F_payment_total_income" min="-2" pref="160" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <EmptySpace max="32767" attributes="0"/>
+                                      <EmptySpace pref="139" max="32767" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                           <Group type="102" attributes="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
@@ -2710,45 +2733,49 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jLabel49" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="F_payment_other" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <Group type="103" groupAlignment="3" attributes="0">
+                                                  <Component id="jLabel49" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="F_payment_other" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                              </Group>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="3" attributes="0">
+                                                  <Component id="jLabel50" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="F_payment_bpjstkc" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="jSeparator2" min="-2" pref="10" max="-2" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="3" attributes="0">
+                                                  <Component id="jLabel59" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="F_payment_net_total" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
                                       </Group>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jLabel50" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="F_payment_bpjstkc" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                          <Component id="jLabel51" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="F_payment_bpjsksc" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="F_payment_eid_allowance" min="-2" pref="25" max="-2" attributes="0"/>
+                                          <Component id="jLabel53" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="F_payment_total_income" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                          <Component id="jLabel56" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="jLabel57" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="F_payment_absent" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jSeparator2" min="-2" pref="10" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="jLabel59" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="F_payment_net_total" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                              </Group>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel51" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="F_payment_bpjsksc" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="F_payment_eid_allowance" min="-2" pref="25" max="-2" attributes="0"/>
-                                  <Component id="jLabel53" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="F_payment_total_income" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                                  <Component id="jLabel56" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
