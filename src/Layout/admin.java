@@ -51,19 +51,15 @@ public final class admin extends javax.swing.JFrame {
     
     public admin() {
         
-//        if(null == Session.employee_id){
-//            JOptionPane.showMessageDialog(null,"Session Expired!");
-//            login loginPage = new login();
-//            loginPage.setVisible(true);
-//            loginPage.pack();
-//            this.dispose();
-//            
-//        }else{
-//            
-//            
-//        }
-        
-        initComponents();
+        if(null == Session.employee_id){
+            JOptionPane.showMessageDialog(null,"Session Expired!");
+            login loginPage = new login();
+            loginPage.setVisible(true);
+            loginPage.pack();
+            this.dispose();
+            
+        }else{
+            initComponents();
             // SET CENTER
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
             this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
@@ -95,6 +91,10 @@ public final class admin extends javax.swing.JFrame {
             clear_form_asset();
             
             setUpFormPayment();
+            
+        }
+        
+        
     }
     
     private static final String EMAIL_PATTERN = 
