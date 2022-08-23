@@ -125,7 +125,12 @@ FROM
 		<band height="45" splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="54" splitType="Stretch"/>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="244" y="27" width="100" height="20" uuid="898c9d21-81db-4b06-a63a-f9ffe7997ff0"/>
+				<textFieldExpression><![CDATA[Test]]></textFieldExpression>
+			</textField>
+		</band>
 	</pageFooter>
 	<summary>
 		<band height="42" splitType="Stretch"/>
