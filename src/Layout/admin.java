@@ -46,6 +46,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import org.jdesktop.swingx.JXDatePicker;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.calendar.CalendarUtils;
 
 /**
@@ -59,6 +60,7 @@ public final class admin extends javax.swing.JFrame {
     private DefaultTableModel tabmode;
     private DefaultTableModel tabmode2;
     private DefaultTableModel tabmode3;
+    private DefaultTableModel tabmode4;
     
     
     public admin() {
@@ -92,6 +94,7 @@ public final class admin extends javax.swing.JFrame {
             dt_division();
             clear_form_division();
             F_division_id.setVisible(false);
+            AutoCompleteDecorator.decorate(CB_inCharge);
             
             CB_member_division();
             CB_member_employee();
@@ -99,18 +102,26 @@ public final class admin extends javax.swing.JFrame {
             F_member_id.setVisible(false);
             clear_form_member();
             dt_member();
+            AutoCompleteDecorator.decorate(F_member_division);
+            AutoCompleteDecorator.decorate(F_member_employee);
 
             CB_asset_employee();
             CB_asset_inventory();
             dt_asset();
             F_asset_id.setVisible(false);
             clear_form_asset();
+            AutoCompleteDecorator.decorate(F_asset_employee);
+            AutoCompleteDecorator.decorate(F_asset_inventory);
 
             setUpFormPayment();
             F_payment_id.setVisible(false);
             dt_payment();
+            AutoCompleteDecorator.decorate(F_payment_employee);
             
-            
+            setUpFormApprasial();
+            F_apprasial_id.setVisible(false);
+            dt_apprasial();
+            AutoCompleteDecorator.decorate(F_apprasial_employee);
             
          
     }
@@ -660,9 +671,146 @@ public final class admin extends javax.swing.JFrame {
             }
         }
         
+    //APPRASIAL
+        protected void setUpFormApprasial(){
+            PlainDocument F_work_quantity = (PlainDocument) F_apprasial_work_quantity.getDocument();
+            PlainDocument F_attendance = (PlainDocument) F_apprasial_attendance.getDocument();
+            PlainDocument F_ability_to_plan_work = (PlainDocument) F_apprasial_ability_to_plan_work.getDocument();
+            PlainDocument F_ability_to_organize_team_work = (PlainDocument) F_apprasial_ability_to_organize_team_work.getDocument();
+            PlainDocument F_ability_to_controling = (PlainDocument) F_apprasial_ability_to_controling.getDocument();
+            PlainDocument F_ability_to_analyze_problems_and_make_decisions = (PlainDocument) F_apprasial_ability_to_analyze_problems_and_make_decisions.getDocument();
+            PlainDocument F_consistent = (PlainDocument) F_apprasial_consistent.getDocument();
+            PlainDocument F_cooperation_and_participation = (PlainDocument) F_apprasial_cooperation_and_participation.getDocument();
+            PlainDocument F_achievement_motivation = (PlainDocument) F_apprasial_achievement_motivation.getDocument();
+            PlainDocument F_emotional_stability = (PlainDocument) F_apprasial_emotional_stability.getDocument();
+            
+            F_work_quantity.setDocumentFilter(new MyIntFilter());
+            F_attendance.setDocumentFilter(new MyIntFilter());
+            F_ability_to_plan_work.setDocumentFilter(new MyIntFilter());
+            F_ability_to_organize_team_work.setDocumentFilter(new MyIntFilter());
+            F_ability_to_controling.setDocumentFilter(new MyIntFilter());
+            F_ability_to_analyze_problems_and_make_decisions.setDocumentFilter(new MyIntFilter());
+            F_consistent.setDocumentFilter(new MyIntFilter());
+            F_cooperation_and_participation.setDocumentFilter(new MyIntFilter());
+            F_achievement_motivation.setDocumentFilter(new MyIntFilter());
+            F_emotional_stability.setDocumentFilter(new MyIntFilter());
+            
+            try{
+                db = conn.createStatement();
+                String query = "SELECT id, employee_id,name FROM t_employee ";
+
+                Result = db.executeQuery(query);
+                F_apprasial_employee.addItem("--- choose ---");
+                while(Result.next()){
+                    String employee_id = Result.getString("employee_id");
+                    String name = Result.getString("name");
+                    String data = employee_id + " - " + name;
+                    F_apprasial_employee.addItem(data);
+                }
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(null, "F_apprasial_employee Data Error");
+                System.out.println(e);
+            }
+            clear_form_apprasial();
+            
+        }
         
+        protected void clear_form_apprasial(){
+            F_apprasial_employee.setSelectedIndex(0);
+            DateFormat dateFormat = new SimpleDateFormat("MM/yyyy");
+            F_apprasial_period.setFormats(dateFormat);
+            F_apprasial_division.setText("");
+            F_apprasial_id.setText("");
+            F_apprasial_search.setText("");
+            dt_apprasial();
+            close_form_apprasial();
+            
+        }
         
+        protected void close_form_apprasial(){
+            F_apprasial_division.setEnabled(false);
+            F_apprasial_work_quantity.setEnabled(false);
+            F_apprasial_attendance.setEnabled(false);
+            F_apprasial_ability_to_plan_work.setEnabled(false);
+            F_apprasial_ability_to_organize_team_work.setEnabled(false);
+            F_apprasial_ability_to_controling.setEnabled(false);
+            F_apprasial_ability_to_analyze_problems_and_make_decisions.setEnabled(false);
+            F_apprasial_consistent.setEnabled(false);
+            F_apprasial_cooperation_and_participation.setEnabled(false);
+            F_apprasial_achievement_motivation.setEnabled(false);
+            F_apprasial_emotional_stability.setEnabled(false);
+            F_apprasial_total.setEnabled(false);
+            F_apprasial_score.setEnabled(false);
+            
+            F_apprasial_division.setText("");
+            F_apprasial_work_quantity.setText(String.valueOf(0));
+            F_apprasial_attendance.setText(String.valueOf(0));
+            F_apprasial_ability_to_plan_work.setText(String.valueOf(0));
+            F_apprasial_ability_to_organize_team_work.setText(String.valueOf(0));
+            F_apprasial_ability_to_controling.setText(String.valueOf(0));
+            F_apprasial_ability_to_analyze_problems_and_make_decisions.setText(String.valueOf(0));
+            F_apprasial_consistent.setText(String.valueOf(0));
+            F_apprasial_cooperation_and_participation.setText(String.valueOf(0));
+            F_apprasial_achievement_motivation.setText(String.valueOf(0));
+            F_apprasial_emotional_stability.setText(String.valueOf(0));
+            F_apprasial_total.setText(String.valueOf(0));
+            F_apprasial_score.setText(String.valueOf(0));
+            
+            btn_calculate_apprasial.setEnabled(false);
+            btn_save_apprasial.setEnabled(true);
+            btn_edit_apprasial.setEnabled(false);
+            btn_delete_apprasial.setEnabled(false);
+        }
         
+        protected void open_form_apprasial(){
+            F_apprasial_work_quantity.setEnabled(true);
+            F_apprasial_attendance.setEnabled(true);
+            F_apprasial_ability_to_plan_work.setEnabled(true);
+            F_apprasial_ability_to_organize_team_work.setEnabled(true);
+            F_apprasial_ability_to_controling.setEnabled(true);
+            F_apprasial_ability_to_analyze_problems_and_make_decisions.setEnabled(true);
+            F_apprasial_consistent.setEnabled(true);
+            F_apprasial_cooperation_and_participation.setEnabled(true);
+            F_apprasial_achievement_motivation.setEnabled(true);
+            F_apprasial_emotional_stability.setEnabled(true);
+            
+            btn_calculate_apprasial.setEnabled(true);
+        }
+        
+        public void dt_apprasial(){
+            Object[]Baris = {"No","Period","Employee","Division","Score","Created Date"};
+            tabmode4 = new DefaultTableModel(null, Baris);
+            table_apprasial.setModel(tabmode4);
+            
+            String sql = "SELECT a.*, CONCAT_WS(\" - \",b.employee_id,b.name) AS employee, c.name AS division \n" +
+                        "FROM t_apprasial a\n" +
+                        "JOIN t_employee b ON a.employee_id = b.id\n" +
+                        "JOIN t_division c ON a.division_id = c.id\n" +
+                        "ORDER BY a.created_at DESC";
+            try{
+                java.sql.Statement stat = conn.createStatement();
+                ResultSet hasil = stat.executeQuery(sql);
+                while (hasil.next()){
+                    
+                    String a = hasil.getString("id");
+                    Date period = hasil.getDate("period");
+                    DateFormat dtf = new SimpleDateFormat("MM/yyyy");
+                    String b = dtf.format(period);
+                    String c = hasil.getString("employee");
+                    String d = hasil.getString("division");
+                    String e = hasil.getString("score");
+                    Date datetime = hasil.getDate("created_at");
+                    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                    String f = df.format(datetime);
+
+                    String[] data={a,b,c,d,e,f};
+                    tabmode4.addRow(data);
+                }
+            }catch (SQLException e){
+                JOptionPane.showMessageDialog(null, "Table Error");
+                System.out.println(e);
+            }
+        }
         
         
         
@@ -870,13 +1018,48 @@ public final class admin extends javax.swing.JFrame {
         jPanel15 = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
         jLabel61 = new javax.swing.JLabel();
-        F_payment_period1 = new org.jdesktop.swingx.JXDatePicker();
+        F_apprasial_period = new org.jdesktop.swingx.JXDatePicker();
         jLabel11 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        F_apprasial_employee = new javax.swing.JComboBox<>();
         jLabel62 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        F_apprasial_division = new javax.swing.JTextField();
         jLabel63 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        F_apprasial_work_quantity = new javax.swing.JTextField();
+        jLabel65 = new javax.swing.JLabel();
+        F_apprasial_attendance = new javax.swing.JTextField();
+        jLabel66 = new javax.swing.JLabel();
+        F_apprasial_ability_to_plan_work = new javax.swing.JTextField();
+        jLabel67 = new javax.swing.JLabel();
+        F_apprasial_ability_to_organize_team_work = new javax.swing.JTextField();
+        F_apprasial_ability_to_controling = new javax.swing.JTextField();
+        jLabel68 = new javax.swing.JLabel();
+        jLabel69 = new javax.swing.JLabel();
+        F_apprasial_ability_to_analyze_problems_and_make_decisions = new javax.swing.JTextField();
+        F_apprasial_consistent = new javax.swing.JTextField();
+        jLabel70 = new javax.swing.JLabel();
+        jLabel71 = new javax.swing.JLabel();
+        F_apprasial_cooperation_and_participation = new javax.swing.JTextField();
+        jLabel72 = new javax.swing.JLabel();
+        F_apprasial_achievement_motivation = new javax.swing.JTextField();
+        jLabel73 = new javax.swing.JLabel();
+        jLabel74 = new javax.swing.JLabel();
+        F_apprasial_emotional_stability = new javax.swing.JTextField();
+        F_apprasial_total = new javax.swing.JTextField();
+        jSeparator3 = new javax.swing.JSeparator();
+        btn_calculate_apprasial = new javax.swing.JButton();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        table_apprasial = new javax.swing.JTable();
+        btn_save_apprasial = new javax.swing.JButton();
+        btn_edit_apprasial = new javax.swing.JButton();
+        btn_print_apprasial = new javax.swing.JButton();
+        btn_delete_apprasial = new javax.swing.JButton();
+        btn_clear_apprasial = new javax.swing.JButton();
+        jLabel75 = new javax.swing.JLabel();
+        F_apprasial_score = new javax.swing.JTextField();
+        jLabel76 = new javax.swing.JLabel();
+        F_apprasial_search = new javax.swing.JTextField();
+        btn_search_apprasial = new javax.swing.JButton();
+        F_apprasial_id = new javax.swing.JTextField();
         panel_division_member = new javax.swing.JPanel();
         BreadCrumb6 = new javax.swing.JPanel();
         INVENTORY5 = new javax.swing.JLabel();
@@ -1502,7 +1685,7 @@ public final class admin extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addGroup(panel_employeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(BreadCrumb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1446, Short.MAX_VALUE))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1272, Short.MAX_VALUE))
                 .addGap(10, 10, 10))
         );
         panel_employeeLayout.setVerticalGroup(
@@ -1529,7 +1712,7 @@ public final class admin extends javax.swing.JFrame {
             .addGroup(BreadCrumb1Layout.createSequentialGroup()
                 .addGap(534, 534, 534)
                 .addComponent(INVENTORY)
-                .addContainerGap(774, Short.MAX_VALUE))
+                .addContainerGap(600, Short.MAX_VALUE))
         );
         BreadCrumb1Layout.setVerticalGroup(
             BreadCrumb1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1745,7 +1928,7 @@ public final class admin extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 824, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1952,7 +2135,7 @@ public final class admin extends javax.swing.JFrame {
                                 .addComponent(btn_save_asset, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(btn_edit_asset, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 181, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel7Layout.createSequentialGroup()
                                 .addGap(8, 8, 8)
@@ -2112,7 +2295,7 @@ public final class admin extends javax.swing.JFrame {
             .addGroup(BreadCrumb3Layout.createSequentialGroup()
                 .addGap(550, 550, 550)
                 .addComponent(INVENTORY2)
-                .addContainerGap(788, Short.MAX_VALUE))
+                .addContainerGap(614, Short.MAX_VALUE))
         );
         BreadCrumb3Layout.setVerticalGroup(
             BreadCrumb3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2495,18 +2678,21 @@ public final class admin extends javax.swing.JFrame {
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel11Layout.createSequentialGroup()
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel45)
-                            .addComponent(jLabel47)
-                            .addComponent(jLabel52)
-                            .addComponent(jLabel57)
-                            .addComponent(jLabel64))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(F_payment_absent, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(F_payment_employee, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(F_payment_period, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(F_payment_division, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(F_payment_working_day, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel11Layout.createSequentialGroup()
+                                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel45)
+                                    .addComponent(jLabel47)
+                                    .addComponent(jLabel52)
+                                    .addComponent(jLabel57)
+                                    .addComponent(jLabel64))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(F_payment_absent, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(F_payment_employee, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(F_payment_period, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(F_payment_division, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(F_payment_working_day, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(F_payment_id, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(182, 182, 182)
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel11Layout.createSequentialGroup()
@@ -2546,7 +2732,7 @@ public final class admin extends javax.swing.JFrame {
                                                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(F_payment_bpjstkc, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(F_payment_bpjsksc, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 212, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addGroup(jPanel11Layout.createSequentialGroup()
                                                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2570,8 +2756,7 @@ public final class admin extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(btn_payment_calculate_income))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
-                        .addComponent(F_payment_id, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btn_save_payment, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btn_edit_payment, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2607,7 +2792,9 @@ public final class admin extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel64)
-                            .addComponent(F_payment_absent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(F_payment_absent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(F_payment_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel11Layout.createSequentialGroup()
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel54)
@@ -2628,11 +2815,11 @@ public final class admin extends javax.swing.JFrame {
                             .addComponent(F_payment_net_total, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btn_payment_calculate_income)))
                     .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel20)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(F_payment_basicSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel22)
                             .addComponent(F_payment_allowance, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -2666,8 +2853,7 @@ public final class admin extends javax.swing.JFrame {
                     .addComponent(btn_edit_payment, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_delete_payment, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_clear_payment, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_save_payment, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(F_payment_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_save_payment, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -2708,7 +2894,7 @@ public final class admin extends javax.swing.JFrame {
             .addGroup(BreadCrumb5Layout.createSequentialGroup()
                 .addGap(550, 550, 550)
                 .addComponent(INVENTORY4)
-                .addContainerGap(766, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         BreadCrumb5Layout.setVerticalGroup(
             BreadCrumb5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2725,13 +2911,135 @@ public final class admin extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
         jLabel11.setText("Employee");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        F_apprasial_employee.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                F_apprasial_employeeItemStateChanged(evt);
+            }
+        });
 
         jLabel62.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
         jLabel62.setText("Division");
 
         jLabel63.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
-        jLabel63.setText("Division");
+        jLabel63.setText("Work Quantity");
+
+        jLabel65.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        jLabel65.setText("Attendance");
+
+        jLabel66.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        jLabel66.setText("Ability to Plan Work");
+
+        jLabel67.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        jLabel67.setText("Ability to Organize Team Work");
+
+        jLabel68.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        jLabel68.setText("Ability to Controling");
+
+        jLabel69.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        jLabel69.setText("Ability to Analyze Problems & make Decisions");
+
+        jLabel70.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        jLabel70.setText("Consistent");
+
+        jLabel71.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        jLabel71.setText("Cooperation & Participation");
+
+        jLabel72.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        jLabel72.setText("Achievement Motivation");
+
+        jLabel73.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        jLabel73.setText("Emotional Stability");
+
+        jLabel74.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        jLabel74.setText("TOTAL");
+
+        btn_calculate_apprasial.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        btn_calculate_apprasial.setText("Calculate");
+        btn_calculate_apprasial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_calculate_apprasialActionPerformed(evt);
+            }
+        });
+
+        jScrollPane11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jScrollPane11MouseClicked(evt);
+            }
+        });
+
+        table_apprasial.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        table_apprasial.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                table_apprasialMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                table_apprasialMouseEntered(evt);
+            }
+        });
+        jScrollPane11.setViewportView(table_apprasial);
+
+        btn_save_apprasial.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        btn_save_apprasial.setText("SAVE");
+        btn_save_apprasial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_save_apprasialActionPerformed(evt);
+            }
+        });
+
+        btn_edit_apprasial.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        btn_edit_apprasial.setText("EDIT");
+        btn_edit_apprasial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_edit_apprasialActionPerformed(evt);
+            }
+        });
+
+        btn_print_apprasial.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        btn_print_apprasial.setText("PRINT");
+        btn_print_apprasial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_print_apprasialActionPerformed(evt);
+            }
+        });
+
+        btn_delete_apprasial.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        btn_delete_apprasial.setText("DELETE");
+        btn_delete_apprasial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_delete_apprasialActionPerformed(evt);
+            }
+        });
+
+        btn_clear_apprasial.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        btn_clear_apprasial.setText("CLEAR");
+        btn_clear_apprasial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_clear_apprasialActionPerformed(evt);
+            }
+        });
+
+        jLabel75.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        jLabel75.setText("SCORE");
+
+        jLabel76.setFont(new java.awt.Font("Sitka Text", 1, 13)); // NOI18N
+        jLabel76.setText("Search");
+
+        btn_search_apprasial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Asset/search.png"))); // NOI18N
+        btn_search_apprasial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_search_apprasialActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
@@ -2739,51 +3047,163 @@ public final class admin extends javax.swing.JFrame {
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel16Layout.createSequentialGroup()
-                            .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel16Layout.createSequentialGroup()
-                                    .addGap(10, 10, 10)
-                                    .addComponent(jLabel61)
-                                    .addGap(42, 42, 42))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel16Layout.createSequentialGroup()
+                    .addGroup(jPanel16Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel16Layout.createSequentialGroup()
+                                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel63)
+                                    .addComponent(jLabel65)
+                                    .addComponent(jLabel66)
+                                    .addComponent(jLabel67)
+                                    .addComponent(jLabel68)
+                                    .addComponent(jLabel69)
                                     .addComponent(jLabel11)
-                                    .addGap(18, 18, 18)))
-                            .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(F_payment_period1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)))
-                        .addGroup(jPanel16Layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jLabel62)
-                            .addGap(29, 29, 29)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jLabel61)
+                                    .addComponent(jLabel70)
+                                    .addComponent(jLabel71)
+                                    .addComponent(jLabel62)
+                                    .addComponent(jLabel72)
+                                    .addComponent(jLabel73))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(F_apprasial_emotional_stability, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(F_apprasial_ability_to_analyze_problems_and_make_decisions, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(F_apprasial_ability_to_plan_work, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(F_apprasial_attendance, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(F_apprasial_work_quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(F_apprasial_consistent, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(F_apprasial_cooperation_and_participation, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(F_apprasial_achievement_motivation, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(F_apprasial_employee, 0, 224, Short.MAX_VALUE)
+                                    .addComponent(F_apprasial_period, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(F_apprasial_division)
+                                    .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(F_apprasial_ability_to_controling, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(F_apprasial_ability_to_organize_team_work, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel16Layout.createSequentialGroup()
+                                .addGap(276, 276, 276)
+                                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel75)
+                                    .addComponent(jLabel74))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(F_apprasial_score, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel16Layout.createSequentialGroup()
+                                        .addComponent(F_apprasial_total, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(112, 112, 112))))))
                     .addGroup(jPanel16Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel63)
-                        .addGap(29, 29, 29)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel16Layout.createSequentialGroup()
+                                .addComponent(btn_save_apprasial, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btn_edit_apprasial, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btn_print_apprasial, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btn_delete_apprasial, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btn_clear_apprasial, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(F_apprasial_id, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btn_calculate_apprasial, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(18, 32, Short.MAX_VALUE)
+                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel16Layout.createSequentialGroup()
+                        .addComponent(jLabel76)
+                        .addGap(18, 18, 18)
+                        .addComponent(F_apprasial_search)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_search_apprasial, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 644, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel61)
-                    .addComponent(F_payment_period1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel62)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel63)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(511, Short.MAX_VALUE))
+                    .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel61)
+                        .addComponent(F_apprasial_period, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel76)
+                        .addComponent(F_apprasial_search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_search_apprasial, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel16Layout.createSequentialGroup()
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel11)
+                            .addComponent(F_apprasial_employee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel62)
+                            .addComponent(F_apprasial_division, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel63)
+                            .addComponent(F_apprasial_work_quantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel65)
+                            .addComponent(F_apprasial_attendance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel66)
+                            .addComponent(F_apprasial_ability_to_plan_work, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel67)
+                            .addComponent(F_apprasial_ability_to_organize_team_work, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel68)
+                            .addComponent(F_apprasial_ability_to_controling, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel69)
+                            .addComponent(F_apprasial_ability_to_analyze_problems_and_make_decisions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel70)
+                            .addComponent(F_apprasial_consistent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel71)
+                            .addComponent(F_apprasial_cooperation_and_participation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(F_apprasial_achievement_motivation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel72))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel73)
+                            .addComponent(F_apprasial_emotional_stability, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(F_apprasial_total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel74)
+                            .addComponent(btn_calculate_apprasial))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel75)
+                            .addComponent(F_apprasial_score, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(F_apprasial_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btn_clear_apprasial, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btn_delete_apprasial, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btn_print_apprasial, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btn_save_apprasial, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btn_edit_apprasial, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
@@ -2940,7 +3360,7 @@ public final class admin extends javax.swing.JFrame {
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel17Layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 1426, Short.MAX_VALUE)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 1252, Short.MAX_VALUE)
                 .addGap(10, 10, 10))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel17Layout.createSequentialGroup()
                 .addContainerGap()
@@ -3149,7 +3569,7 @@ public final class admin extends javax.swing.JFrame {
                         .addComponent(D_btn_inventory, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(D_btn_apprasial, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(301, 836, Short.MAX_VALUE))
+                .addGap(301, 662, Short.MAX_VALUE))
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3211,16 +3631,16 @@ public final class admin extends javax.swing.JFrame {
 
         jLabel12.setFont(new java.awt.Font("Verdana", 1, 13)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("© 2022 KEL. 4 | ALL RIGHT RESERVED");
+        jLabel12.setText("© 2022 PT. Merdis International| ALL RIGHT RESERVED");
 
         javax.swing.GroupLayout gradient_footer1Layout = new javax.swing.GroupLayout(gradient_footer1);
         gradient_footer1.setLayout(gradient_footer1Layout);
         gradient_footer1Layout.setHorizontalGroup(
             gradient_footer1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gradient_footer1Layout.createSequentialGroup()
-                .addContainerGap(1204, Short.MAX_VALUE)
+                .addContainerGap(1097, Short.MAX_VALUE)
                 .addComponent(jLabel12)
-                .addGap(29, 29, 29))
+                .addGap(136, 136, 136))
         );
         gradient_footer1Layout.setVerticalGroup(
             gradient_footer1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -5036,38 +5456,39 @@ public final class admin extends javax.swing.JFrame {
         try {
             if(F_payment_period.getDate() == null){
                 JOptionPane.showMessageDialog(null,"Period required !");
-            }
-            Integer working_day = ((F_payment_working_day.getText().isEmpty() ? 0 : Integer.parseInt(F_payment_working_day.getText())));
-            Integer absent = ((F_payment_absent.getText().isEmpty() ? 0 : Integer.parseInt(F_payment_absent.getText())));
-            Integer salary = ((F_payment_basicSalary.getText().isEmpty() ? 0 : Integer.parseInt(F_payment_basicSalary.getText())));
-            Integer allowance = ((F_payment_allowance.getText().isEmpty() ? 0 : Integer.parseInt(F_payment_allowance.getText())));
-            Integer overtime = ((F_payment_overtime.getText().isEmpty() ? 0 : Integer.parseInt(F_payment_overtime.getText())));
-            Integer others = ((F_payment_other.getText().isEmpty() ? 0 : Integer.parseInt(F_payment_other.getText())));
-            Integer eid_allowance = ((F_payment_eid_allowance.getText().isEmpty() ? 0 : Integer.parseInt(F_payment_eid_allowance.getText())));
-            if(working_day == 0){
-                JOptionPane.showMessageDialog(null, "Working Day required !");
-            }else if(salary == 0){
-                JOptionPane.showMessageDialog(null, "Salary required !");
             }else{
-                Integer bpjs_tk_c = salary*37/10/100;
-                Integer bpjs_ks_c = salary*4/100;
-                Integer total_income = salary+allowance+overtime+others+eid_allowance+bpjs_tk_c+bpjs_ks_c;
+                Integer working_day = ((F_payment_working_day.getText().isEmpty() ? 0 : Integer.parseInt(F_payment_working_day.getText())));
+                Integer absent = ((F_payment_absent.getText().isEmpty() ? 0 : Integer.parseInt(F_payment_absent.getText())));
+                Integer salary = ((F_payment_basicSalary.getText().isEmpty() ? 0 : Integer.parseInt(F_payment_basicSalary.getText())));
+                Integer allowance = ((F_payment_allowance.getText().isEmpty() ? 0 : Integer.parseInt(F_payment_allowance.getText())));
+                Integer overtime = ((F_payment_overtime.getText().isEmpty() ? 0 : Integer.parseInt(F_payment_overtime.getText())));
+                Integer others = ((F_payment_other.getText().isEmpty() ? 0 : Integer.parseInt(F_payment_other.getText())));
+                Integer eid_allowance = ((F_payment_eid_allowance.getText().isEmpty() ? 0 : Integer.parseInt(F_payment_eid_allowance.getText())));
+                if(working_day == 0){
+                    JOptionPane.showMessageDialog(null, "Working Day required !");
+                }else if(salary == 0){
+                    JOptionPane.showMessageDialog(null, "Salary required !");
+                }else{
+                    Integer bpjs_tk_c = salary*37/10/100;
+                    Integer bpjs_ks_c = salary*4/100;
+                    Integer total_income = salary+allowance+overtime+others+eid_allowance+bpjs_tk_c+bpjs_ks_c;
 
-                Integer bpjs_tk_e = salary*2/100;
-                Integer bpjs_ks_e = salary*1/100;
-                Integer price_day = salary/working_day;
-                Integer attendance = price_day*absent;
+                    Integer bpjs_tk_e = salary*2/100;
+                    Integer bpjs_ks_e = salary*1/100;
+                    Integer price_day = salary/working_day;
+                    Integer attendance = price_day*absent;
 
-                Integer net_total = total_income-bpjs_tk_e-bpjs_ks_e-attendance;
+                    Integer net_total = total_income-bpjs_tk_e-bpjs_ks_e-attendance;
 
-                F_payment_bpjstkc.setText(String.valueOf(bpjs_tk_c));
-                F_payment_bpjsksc.setText(String.valueOf(bpjs_ks_c));
-                F_payment_total_income.setText(String.valueOf(total_income));
+                    F_payment_bpjstkc.setText(String.valueOf(bpjs_tk_c));
+                    F_payment_bpjsksc.setText(String.valueOf(bpjs_ks_c));
+                    F_payment_total_income.setText(String.valueOf(total_income));
 
-                F_payment_bpjstke.setText(String.valueOf(bpjs_tk_e));
-                F_payment_bpjskse.setText(String.valueOf(bpjs_ks_e));
-                F_payment_attendance.setText(String.valueOf(attendance));
-                F_payment_net_total.setText(String.valueOf(net_total)); 
+                    F_payment_bpjstke.setText(String.valueOf(bpjs_tk_e));
+                    F_payment_bpjskse.setText(String.valueOf(bpjs_ks_e));
+                    F_payment_attendance.setText(String.valueOf(attendance));
+                    F_payment_net_total.setText(String.valueOf(net_total)); 
+                } 
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Calculate Error");
@@ -5079,6 +5500,464 @@ public final class admin extends javax.swing.JFrame {
     private void F_payment_basicSalaryKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_F_payment_basicSalaryKeyReleased
 
     }//GEN-LAST:event_F_payment_basicSalaryKeyReleased
+
+    private void table_apprasialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_apprasialMouseClicked
+
+        btn_save_apprasial.setEnabled(false);
+        btn_edit_apprasial.setEnabled(true);
+        btn_delete_apprasial.setEnabled(true);
+        
+        //{"No","Period","Employee","Division","Score","Created Date"};
+        int idx = table_apprasial.getSelectedRow();
+        String id = table_apprasial.getValueAt(idx, 0).toString();
+        
+        String query = "SELECT a.*, CONCAT_WS(\" - \",b.employee_id,b.name) AS employee, c.name AS division\n" +
+                        "FROM t_apprasial a\n" +
+                        "JOIN t_employee b ON a.employee_id = b.id\n" +
+                        "JOIN t_division c ON a.division_id = c.id\n" +
+                        "WHERE a.id = "+ id;
+        
+        try {
+            java.sql.Statement stat = conn.createStatement();
+            ResultSet hasil = stat.executeQuery(query);
+            while (hasil.next()){
+                F_apprasial_id.setText(id);
+                F_apprasial_period.setDate(hasil.getDate("period"));
+                F_apprasial_employee.setSelectedItem(hasil.getString("employee"));
+                F_apprasial_division.setText(hasil.getString("division"));
+                F_apprasial_work_quantity.setText(String.valueOf(hasil.getString("work_quantity")));
+                F_apprasial_attendance.setText(String.valueOf(hasil.getString("attendance")));
+                F_apprasial_ability_to_plan_work.setText(String.valueOf(hasil.getString("ability_to_plan_work")));
+                F_apprasial_ability_to_organize_team_work.setText(String.valueOf(hasil.getString("ability_to_organize_team_work")));
+                F_apprasial_ability_to_controling.setText(String.valueOf(hasil.getString("ability_to_controling")));
+                F_apprasial_ability_to_analyze_problems_and_make_decisions.setText(String.valueOf(hasil.getString("ability_to_analyze_problems_and_make_decisions")));
+                F_apprasial_consistent.setText(String.valueOf(hasil.getString("consistent")));
+                F_apprasial_cooperation_and_participation.setText(String.valueOf(hasil.getString("cooperation_and_participation")));
+                F_apprasial_achievement_motivation.setText(String.valueOf(hasil.getString("achievement_motivation")));
+                F_apprasial_emotional_stability.setText(String.valueOf(hasil.getString("emotional_stability")));
+                F_apprasial_total.setText(String.valueOf(hasil.getString("total")));
+                F_apprasial_score.setText(String.valueOf(hasil.getString("score")));
+            }
+
+        }catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        
+    }//GEN-LAST:event_table_apprasialMouseClicked
+
+    private void table_apprasialMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_apprasialMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_table_apprasialMouseEntered
+
+    private void jScrollPane11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane11MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jScrollPane11MouseClicked
+
+    private void btn_save_apprasialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_save_apprasialActionPerformed
+        
+        if(F_apprasial_period.getDate() == null){
+            JOptionPane.showMessageDialog(null,"Period required !");
+        }else{
+            DateFormat sysDate = new SimpleDateFormat("yyyy/MM/dd");
+            String val_payment_period = sysDate.format(F_apprasial_period.getDate());
+            String val_employee = F_apprasial_employee.getSelectedItem().toString();
+            String regex = "-";
+            String val_employee_id = val_employee.substring(0, val_employee.indexOf(regex));
+            String val_division = F_apprasial_division.getText();
+            
+            Integer val_work_quantity = ((F_apprasial_work_quantity.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_work_quantity.getText())));
+            Integer val_attendance = ((F_apprasial_attendance.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_attendance.getText())));
+            Integer val_ability_to_plan_work = ((F_apprasial_ability_to_plan_work.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_ability_to_plan_work.getText())));
+            Integer val_ability_to_organize_team_work = ((F_apprasial_ability_to_organize_team_work.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_ability_to_organize_team_work.getText())));
+            Integer val_ability_to_controling = ((F_apprasial_ability_to_controling.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_ability_to_controling.getText())));
+            Integer val_ability_to_analyze_problems_and_make_decisions = ((F_apprasial_ability_to_analyze_problems_and_make_decisions.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_ability_to_analyze_problems_and_make_decisions.getText())));
+            Integer val_consistent = ((F_apprasial_consistent.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_consistent.getText())));
+            Integer val_cooperation_and_participation = ((F_apprasial_cooperation_and_participation.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_cooperation_and_participation.getText())));
+            Integer val_achievement_motivation = ((F_apprasial_achievement_motivation.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_achievement_motivation.getText())));
+            Integer val_emotional_stability = ((F_apprasial_emotional_stability.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_emotional_stability.getText())));
+            Integer val_total = ((F_apprasial_total.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_total.getText())));
+            Double val_score = ((F_apprasial_score.getText().isEmpty() ? 0 : Double.parseDouble(F_apprasial_score.getText())));
+            String datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+
+            String employee_id = "";
+            String division_id = "";
+            String employee_start_date = "";
+
+            //VALIDATION
+            if ( "--- choose ---".equals(val_employee) || val_division.trim().length() == 0 || val_total == 0 || val_score == 0.0){
+                JOptionPane.showMessageDialog(null,"Please Click Button Calculate again !");
+            } else{
+
+                // Get Id for Employee & Division
+                String query_get_employee_id = "SELECT a.*,c.id AS division_id \n" +
+                                                "FROM t_employee a \n" +
+                                                "JOIN t_user_level b ON a.id = b.id_user \n" +
+                                                "JOIN t_division c ON b.id_division = c.id \n" +
+                                                "WHERE employee_id= '"+val_employee_id+"' LIMIT 1";
+                try {
+                    java.sql.Statement stat = conn.createStatement();
+                    ResultSet hasil = stat.executeQuery(query_get_employee_id);
+                    while (hasil.next()){
+                        employee_id = hasil.getString("id");
+                        division_id = hasil.getString("division_id");
+                        employee_start_date = hasil.getString("created_at");
+                    }
+
+                }catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+
+                //Insert t_apprasial
+                String query = "INSERT INTO t_apprasial(\n" +
+                                "period,\n" +
+                                "employee_id,\n" +
+                                "division_id,\n" +
+                                "work_start,\n" +
+                                "work_quantity,\n" +
+                                "attendance,\n" +
+                                "ability_to_plan_work,\n" +
+                                "ability_to_organize_team_work,\n" +
+                                "ability_to_controling,\n" +
+                                "ability_to_analyze_problems_and_make_decisions,\n" +
+                                "consistent,\n" +
+                                "cooperation_and_participation,\n" +
+                                "achievement_motivation,\n" +
+                                "emotional_stability,\n" +
+                                "total,\n" +
+                                "score,\n" +
+                                "created_at\n" +
+                                ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                try {
+                    PreparedStatement stat = conn.prepareStatement(query);
+                    stat.setString(1, val_payment_period);
+                    stat.setString(2, employee_id);
+                    stat.setString(3, division_id);
+                    stat.setString(4, employee_start_date);
+                    stat.setString(5, String.valueOf(val_work_quantity));
+                    stat.setString(6, String.valueOf(val_attendance));
+                    stat.setString(7, String.valueOf(val_ability_to_plan_work));
+                    stat.setString(8, String.valueOf(val_ability_to_organize_team_work));
+                    stat.setString(9, String.valueOf(val_ability_to_controling));
+                    stat.setString(10, String.valueOf(val_ability_to_analyze_problems_and_make_decisions));
+                    stat.setString(11, String.valueOf(val_consistent));
+                    stat.setString(12, String.valueOf(val_cooperation_and_participation));
+                    stat.setString(13, String.valueOf(val_achievement_motivation));
+                    stat.setString(14, String.valueOf(val_emotional_stability));
+                    stat.setString(15, String.valueOf(val_total));
+                    stat.setString(16, String.valueOf(val_score));
+                    stat.setString(17, datetime);
+
+                    stat.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "Create Apprasial Success");
+                    clear_form_apprasial();
+                    F_apprasial_employee.requestFocus();
+                    dt_apprasial();
+                }catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, "Create Apprasial Failed!");
+                    System.out.println(e);
+                }
+            }
+        }
+    }//GEN-LAST:event_btn_save_apprasialActionPerformed
+
+    private void btn_edit_apprasialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_edit_apprasialActionPerformed
+
+        if(F_apprasial_period.getDate() == null){
+            JOptionPane.showMessageDialog(null,"Period required !");
+        }else{
+            String id = F_apprasial_id.getText();
+            DateFormat sysDate = new SimpleDateFormat("yyyy/MM/dd");
+            String val_payment_period = sysDate.format(F_apprasial_period.getDate());
+            String val_employee = F_apprasial_employee.getSelectedItem().toString();
+            String regex = "-";
+            String val_employee_id = val_employee.substring(0, val_employee.indexOf(regex));
+            String val_division = F_apprasial_division.getText();
+            
+            Integer val_work_quantity = ((F_apprasial_work_quantity.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_work_quantity.getText())));
+            Integer val_attendance = ((F_apprasial_attendance.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_attendance.getText())));
+            Integer val_ability_to_plan_work = ((F_apprasial_ability_to_plan_work.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_ability_to_plan_work.getText())));
+            Integer val_ability_to_organize_team_work = ((F_apprasial_ability_to_organize_team_work.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_ability_to_organize_team_work.getText())));
+            Integer val_ability_to_controling = ((F_apprasial_ability_to_controling.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_ability_to_controling.getText())));
+            Integer val_ability_to_analyze_problems_and_make_decisions = ((F_apprasial_ability_to_analyze_problems_and_make_decisions.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_ability_to_analyze_problems_and_make_decisions.getText())));
+            Integer val_consistent = ((F_apprasial_consistent.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_consistent.getText())));
+            Integer val_cooperation_and_participation = ((F_apprasial_cooperation_and_participation.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_cooperation_and_participation.getText())));
+            Integer val_achievement_motivation = ((F_apprasial_achievement_motivation.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_achievement_motivation.getText())));
+            Integer val_emotional_stability = ((F_apprasial_emotional_stability.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_emotional_stability.getText())));
+            Integer val_total = ((F_apprasial_total.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_total.getText())));
+            Double val_score = ((F_apprasial_score.getText().isEmpty() ? 0 : Double.parseDouble(F_apprasial_score.getText())));
+            String datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+
+            String employee_id = "";
+            String division_id = "";
+            String employee_start_date = "";
+
+            //VALIDATION
+            if ( "--- choose ---".equals(val_employee) || val_division.trim().length() == 0 || val_total == 0 || val_score == 0.0){
+                JOptionPane.showMessageDialog(null,"Please Click Button Calculate again !");
+            } else{
+
+                // Get Id for Employee & Division
+                String query_get_employee_id = "SELECT a.*,c.id AS division_id \n" +
+                                                "FROM t_employee a \n" +
+                                                "JOIN t_user_level b ON a.id = b.id_user \n" +
+                                                "JOIN t_division c ON b.id_division = c.id \n" +
+                                                "WHERE employee_id= '"+val_employee_id+"' LIMIT 1";
+                try {
+                    java.sql.Statement stat = conn.createStatement();
+                    ResultSet hasil = stat.executeQuery(query_get_employee_id);
+                    while (hasil.next()){
+                        employee_id = hasil.getString("id");
+                        division_id = hasil.getString("division_id");
+                        employee_start_date = hasil.getString("created_at");
+                    }
+
+                }catch (SQLException ex) {
+                    System.out.println(ex);
+                }
+
+                //Insert t_apprasial
+                String query = "UPDATE t_apprasial SET\n" +
+                                "period=?,\n" +
+                                "employee_id=?,\n" +
+                                "division_id=?,\n" +
+                                "work_start=?,\n" +
+                                "work_quantity=?,\n" +
+                                "attendance=?,\n" +
+                                "ability_to_plan_work=?,\n" +
+                                "ability_to_organize_team_work=?,\n" +
+                                "ability_to_controling=?,\n" +
+                                "ability_to_analyze_problems_and_make_decisions=?,\n" +
+                                "consistent=?,\n" +
+                                "cooperation_and_participation=?,\n" +
+                                "achievement_motivation=?,\n" +
+                                "emotional_stability=?,\n" +
+                                "total=?,\n" +
+                                "score=?,\n" +
+                                "updated_at=?\n" +
+                                "WHERE id=?";
+                try {
+                    PreparedStatement stat = conn.prepareStatement(query);
+                    stat.setString(1, val_payment_period);
+                    stat.setString(2, employee_id);
+                    stat.setString(3, division_id);
+                    stat.setString(4, employee_start_date);
+                    stat.setString(5, String.valueOf(val_work_quantity));
+                    stat.setString(6, String.valueOf(val_attendance));
+                    stat.setString(7, String.valueOf(val_ability_to_plan_work));
+                    stat.setString(8, String.valueOf(val_ability_to_organize_team_work));
+                    stat.setString(9, String.valueOf(val_ability_to_controling));
+                    stat.setString(10, String.valueOf(val_ability_to_analyze_problems_and_make_decisions));
+                    stat.setString(11, String.valueOf(val_consistent));
+                    stat.setString(12, String.valueOf(val_cooperation_and_participation));
+                    stat.setString(13, String.valueOf(val_achievement_motivation));
+                    stat.setString(14, String.valueOf(val_emotional_stability));
+                    stat.setString(15, String.valueOf(val_total));
+                    stat.setString(16, String.valueOf(val_score));
+                    stat.setString(17, datetime);
+                    stat.setString(18, id);
+
+                    stat.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "Edit Apprasial Success");
+                    clear_form_apprasial();
+                    F_apprasial_employee.requestFocus();
+                    dt_apprasial();
+                }catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, "Edit Apprasial Failed!");
+                    System.out.println(e);
+                }
+            }
+        }
+        
+    }//GEN-LAST:event_btn_edit_apprasialActionPerformed
+
+    private void btn_print_apprasialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_print_apprasialActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_print_apprasialActionPerformed
+
+    private void btn_delete_apprasialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_delete_apprasialActionPerformed
+        int ok = JOptionPane.showConfirmDialog(null, "Are you sure want delete?", "Konfirmasi Dialog", JOptionPane.YES_NO_CANCEL_OPTION);
+        if (ok==0){
+            
+            String sql = "DELETE FROM t_apprasial WHERE id ='"+F_apprasial_id.getText()+"'";
+            try{
+                PreparedStatement stat = conn.prepareStatement(sql);
+                stat.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Delete Apprasial Success");
+                
+                clear_form_apprasial();
+                F_apprasial_employee.requestFocus();
+                dt_apprasial();
+                
+            }catch (SQLException e){
+                JOptionPane.showMessageDialog(null, "Delete Apprasial Failed");
+                System.out.println(e);
+            }
+            
+        }
+    }//GEN-LAST:event_btn_delete_apprasialActionPerformed
+
+    private void btn_clear_apprasialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clear_apprasialActionPerformed
+        clear_form_apprasial();
+    }//GEN-LAST:event_btn_clear_apprasialActionPerformed
+
+    private void btn_search_apprasialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_search_apprasialActionPerformed
+        
+        Object[]Baris = {"No","Period","Employee","Division","Score","Created Date"};
+        tabmode4 = new DefaultTableModel(null, Baris);
+        table_apprasial.setModel(tabmode4);
+
+        String sql = "SELECT a.*, CONCAT_WS(\" - \",b.employee_id,b.name) AS employee, c.name AS division\n" +
+                        "FROM t_apprasial a\n" +
+                        "JOIN t_employee b ON a.employee_id = b.id\n" +
+                        "JOIN t_division c ON a.division_id = c.id\n" +
+                        "WHERE a.period LIKE '%"+ F_apprasial_search.getText() +"%'\n" +
+                        "OR CONCAT_WS(\" - \",b.employee_id,b.name) LIKE '%"+ F_apprasial_search.getText() +"%'\n" +
+                        "OR c.name LIKE '%"+ F_apprasial_search.getText() +"%'\n" +
+                        "OR a.score LIKE '%"+ F_apprasial_search.getText() +"%'\n" +
+                        "ORDER BY a.created_at DESC";
+        try{
+            java.sql.Statement stat = conn.createStatement();
+            ResultSet hasil = stat.executeQuery(sql);
+            while (hasil.next()){
+
+                String a = hasil.getString("id");
+                Date period = hasil.getDate("period");
+                DateFormat dtf = new SimpleDateFormat("MM/yyyy");
+                String b = dtf.format(period);
+                String c = hasil.getString("employee");
+                String d = hasil.getString("division");
+                String e = hasil.getString("score");
+                Date datetime = hasil.getDate("created_at");
+                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                String f = df.format(datetime);
+
+                String[] data={a,b,c,d,e,f};
+                tabmode4.addRow(data);
+            }
+        }catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "Table Error");
+            System.out.println(e);
+        }
+
+
+
+    }//GEN-LAST:event_btn_search_apprasialActionPerformed
+
+    private void F_apprasial_employeeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_F_apprasial_employeeItemStateChanged
+            
+        if (evt.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
+          Object item = evt.getItem();
+          
+          if(item != "--- choose ---"){
+              
+            // System.out.println(inCharge.indexOf(regex));
+            String val_item = item.toString();
+            String regex = "-";
+            String str_employee = val_item.substring(0, val_item.indexOf(regex));
+            String employee_id = "";
+            String division = "";
+            
+            // Get Id for Employee Id
+            String query_get_employee_id = "SELECT c.id AS employee_id, b.name AS division FROM t_user_level a\n" +
+                                            "LEFT JOIN t_division b ON a.id_division = b.id\n" +
+                                            "LEFT JOIN t_employee c ON a.id_user = c.id\n" +
+                                            "WHERE c.employee_id='"+ str_employee +"' LIMIT 1";
+
+            try {
+                java.sql.Statement stat = conn.createStatement();
+                ResultSet hasil = stat.executeQuery(query_get_employee_id);
+                while (hasil.next()){
+                    employee_id = hasil.getString("employee_id");
+                    division = hasil.getString("division");
+                }
+            }catch (SQLException ex) {
+                System.out.println(ex);
+            }
+            
+            Object[]Baris = {"No","Period","Employee","Division","Score","Created Date"};
+            tabmode4 = new DefaultTableModel(null, Baris);
+            table_apprasial.setModel(tabmode4);
+            
+            String sql = "SELECT a.*, CONCAT_WS(\" - \",b.employee_id,b.name) AS employee, c.name AS division \n" +
+                        "FROM t_apprasial a\n" +
+                        "JOIN t_employee b ON a.employee_id = b.id\n" +
+                        "JOIN t_division c ON a.division_id = c.id\n" +
+                        "WHERE b.employee_id = '" + str_employee + "'\n" +
+                        "ORDER BY a.created_at DESC";
+            try{
+                java.sql.Statement stat = conn.createStatement();
+                ResultSet hasil = stat.executeQuery(sql);
+                while (hasil.next()){
+                    
+                    String a = hasil.getString("id");
+                    Date period = hasil.getDate("period");
+                    DateFormat dtf = new SimpleDateFormat("MM/yyyy");
+                    String b = dtf.format(period);
+                    String c = hasil.getString("employee");
+                    String d = hasil.getString("division");
+                    String e = hasil.getString("score");
+                    Date datetime = hasil.getDate("created_at");
+                    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                    String f = df.format(datetime);
+
+                    String[] data={a,b,c,d,e,f};
+                    tabmode4.addRow(data);
+                }
+            }catch (SQLException e){
+                JOptionPane.showMessageDialog(null, "Table Error");
+                System.out.println(e);
+            }
+            
+            F_apprasial_division.setText(division);
+            open_form_apprasial();
+              
+          }else{
+              close_form_apprasial();
+              dt_apprasial();
+          }
+       }
+    }//GEN-LAST:event_F_apprasial_employeeItemStateChanged
+
+    private void btn_calculate_apprasialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_calculate_apprasialActionPerformed
+        try {
+            if(F_apprasial_period.getDate() == null){
+                JOptionPane.showMessageDialog(null,"Period required !");
+            }else{
+                Integer val_work_quantity = ((F_apprasial_work_quantity.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_work_quantity.getText())));
+                Integer val_attendance = ((F_apprasial_attendance.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_attendance.getText())));
+                Integer val_ability_to_plan_work = ((F_apprasial_ability_to_plan_work.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_ability_to_plan_work.getText())));
+                Integer val_ability_to_organize_team_work = ((F_apprasial_ability_to_organize_team_work.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_ability_to_organize_team_work.getText())));
+                Integer val_ability_to_controling = ((F_apprasial_ability_to_controling.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_ability_to_controling.getText())));
+                Integer val_ability_to_analyze_problems_and_make_decisions = ((F_apprasial_ability_to_analyze_problems_and_make_decisions.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_ability_to_analyze_problems_and_make_decisions.getText())));
+                Integer val_consistent = ((F_apprasial_consistent.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_consistent.getText())));
+                Integer val_cooperation_and_participation = ((F_apprasial_cooperation_and_participation.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_cooperation_and_participation.getText())));
+                Integer val_achievement_motivation = ((F_apprasial_achievement_motivation.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_achievement_motivation.getText())));
+                Integer val_emotional_stability = ((F_apprasial_emotional_stability.getText().isEmpty() ? 0 : Integer.parseInt(F_apprasial_emotional_stability.getText())));
+
+                Integer bobot = 10;
+                
+                Integer work_quantity = bobot*val_work_quantity;
+                Integer attendance = bobot*val_attendance;
+                Integer ability_to_plan_work = bobot*val_ability_to_plan_work;
+                Integer ability_to_organize_team_work = bobot*val_ability_to_organize_team_work;
+                Integer ability_to_controling = bobot*val_ability_to_controling;
+                Integer ability_to_analyze_problems_and_make_decisions = bobot*val_ability_to_analyze_problems_and_make_decisions;
+                Integer consistent = bobot*val_consistent;
+                Integer cooperation_and_participation = bobot*val_cooperation_and_participation;
+                Integer achievement_motivation = bobot*val_achievement_motivation;
+                Integer emotional_stability = bobot*val_emotional_stability;
+                
+                Integer total = work_quantity+attendance+ability_to_plan_work+ability_to_organize_team_work+ability_to_controling+ability_to_analyze_problems_and_make_decisions+consistent+cooperation_and_participation+achievement_motivation+emotional_stability;
+                
+                Double score = total/100.0;
+                F_apprasial_total.setText(String.valueOf(total));
+                F_apprasial_score.setText(Double.toString(score));
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Calculate Error");
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_btn_calculate_apprasialActionPerformed
 
     
     
@@ -5133,6 +6012,23 @@ public final class admin extends javax.swing.JFrame {
     private javax.swing.JButton D_btn_inventory;
     private javax.swing.JButton D_btn_member;
     private javax.swing.JButton D_btn_payment;
+    private javax.swing.JTextField F_apprasial_ability_to_analyze_problems_and_make_decisions;
+    private javax.swing.JTextField F_apprasial_ability_to_controling;
+    private javax.swing.JTextField F_apprasial_ability_to_organize_team_work;
+    private javax.swing.JTextField F_apprasial_ability_to_plan_work;
+    private javax.swing.JTextField F_apprasial_achievement_motivation;
+    private javax.swing.JTextField F_apprasial_attendance;
+    private javax.swing.JTextField F_apprasial_consistent;
+    private javax.swing.JTextField F_apprasial_cooperation_and_participation;
+    private javax.swing.JTextField F_apprasial_division;
+    private javax.swing.JTextField F_apprasial_emotional_stability;
+    private javax.swing.JComboBox<String> F_apprasial_employee;
+    private javax.swing.JTextField F_apprasial_id;
+    private org.jdesktop.swingx.JXDatePicker F_apprasial_period;
+    private javax.swing.JTextField F_apprasial_score;
+    private javax.swing.JTextField F_apprasial_search;
+    private javax.swing.JTextField F_apprasial_total;
+    private javax.swing.JTextField F_apprasial_work_quantity;
     private javax.swing.JTextArea F_asset_description;
     private javax.swing.JComboBox<String> F_asset_employee;
     private javax.swing.JTextField F_asset_id;
@@ -5170,7 +6066,6 @@ public final class admin extends javax.swing.JFrame {
     private javax.swing.JTextField F_payment_other;
     private javax.swing.JTextField F_payment_overtime;
     private org.jdesktop.swingx.JXDatePicker F_payment_period;
-    private org.jdesktop.swingx.JXDatePicker F_payment_period1;
     private javax.swing.JTextField F_payment_total_income;
     private javax.swing.JTextField F_payment_working_day;
     private javax.swing.JLabel INVENTORY;
@@ -5179,18 +6074,22 @@ public final class admin extends javax.swing.JFrame {
     private javax.swing.JLabel INVENTORY3;
     private javax.swing.JLabel INVENTORY4;
     private javax.swing.JLabel INVENTORY5;
+    private javax.swing.JButton btn_calculate_apprasial;
+    private javax.swing.JButton btn_clear_apprasial;
     private javax.swing.JButton btn_clear_asset;
     private javax.swing.JButton btn_clear_division;
     private javax.swing.JButton btn_clear_employee;
     private javax.swing.JButton btn_clear_inventory;
     private javax.swing.JButton btn_clear_member;
     private javax.swing.JButton btn_clear_payment;
+    private javax.swing.JButton btn_delete_apprasial;
     private javax.swing.JButton btn_delete_asset;
     private javax.swing.JButton btn_delete_division;
     private javax.swing.JButton btn_delete_employee;
     private javax.swing.JButton btn_delete_inventory;
     private javax.swing.JButton btn_delete_member;
     private javax.swing.JButton btn_delete_payment;
+    private javax.swing.JButton btn_edit_apprasial;
     private javax.swing.JButton btn_edit_asset;
     private javax.swing.JButton btn_edit_division;
     private javax.swing.JButton btn_edit_employee;
@@ -5207,18 +6106,21 @@ public final class admin extends javax.swing.JFrame {
     private javax.swing.JButton btn_menu_inventory;
     private javax.swing.JButton btn_menu_payment;
     private javax.swing.JButton btn_payment_calculate_income;
+    private javax.swing.JButton btn_print_apprasial;
     private javax.swing.JButton btn_print_asset;
     private javax.swing.JButton btn_print_division;
     private javax.swing.JButton btn_print_employee;
     private javax.swing.JButton btn_print_inventory;
     private javax.swing.JButton btn_print_member;
     private javax.swing.JButton btn_profile;
+    private javax.swing.JButton btn_save_apprasial;
     private javax.swing.JButton btn_save_asset;
     private javax.swing.JButton btn_save_division;
     private javax.swing.JButton btn_save_employee;
     private javax.swing.JButton btn_save_inventory;
     private javax.swing.JButton btn_save_member;
     private javax.swing.JButton btn_save_payment;
+    private javax.swing.JButton btn_search_apprasial;
     private javax.swing.JButton btn_search_asset;
     private javax.swing.JButton btn_search_asset2;
     private javax.swing.JButton btn_search_division;
@@ -5229,7 +6131,6 @@ public final class admin extends javax.swing.JFrame {
     private javax.swing.JPanel footer;
     private Layout.gradient_footer gradient_footer1;
     private Layout.gradient_footer gradient_footer2;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -5291,7 +6192,19 @@ public final class admin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel62;
     private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel64;
+    private javax.swing.JLabel jLabel65;
+    private javax.swing.JLabel jLabel66;
+    private javax.swing.JLabel jLabel67;
+    private javax.swing.JLabel jLabel68;
+    private javax.swing.JLabel jLabel69;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel70;
+    private javax.swing.JLabel jLabel71;
+    private javax.swing.JLabel jLabel72;
+    private javax.swing.JLabel jLabel73;
+    private javax.swing.JLabel jLabel74;
+    private javax.swing.JLabel jLabel75;
+    private javax.swing.JLabel jLabel76;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -5310,6 +6223,7 @@ public final class admin extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -5320,8 +6234,7 @@ public final class admin extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JLabel jkel;
     private javax.swing.JTextArea jtk;
     private javax.swing.JLabel logo;
@@ -5340,6 +6253,7 @@ public final class admin extends javax.swing.JFrame {
     private javax.swing.JPanel sidebar;
     private javax.swing.JTable tabelinventory;
     private javax.swing.JTable tableEmployee;
+    private javax.swing.JTable table_apprasial;
     private javax.swing.JTable table_asset;
     private javax.swing.JTable table_division;
     private javax.swing.JTable table_member;
